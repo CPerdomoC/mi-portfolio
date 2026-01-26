@@ -14,3 +14,5 @@ Creado como proyecto para demostrar capacidades de desarrollo Frontend y desplie
 1. Clonar el repositorio.
 2. Ejecutar `npm install`.
 3. Ejecutar `npm run dev`.
+
+Última actualización: 27 de Enero de 2026
