@@ -1,18 +1,19 @@
 # Portfolio de Christhian Perdomo
 
-Portfolio web desarrollado con **Next.js 14**, **TypeScript** y **Tailwind CSS**.
-Creado como proyecto para demostrar capacidades de desarrollo Frontend y despliegue con ayuda de la inteligencia artificial.
+> 🚀 **Ver Proyecto Online:** [Haz clic aquí para ver la web](https://mi-portfolio-five-murex.vercel.app/)
 
+Portfolio web desarrollado con **Next.js 14**, **TypeScript** y **Tailwind CSS**.
+
+Este proyecto incluye **StudentOS**: Un dashboard interactivo integrado que demuestra el uso de:
+- **Persistencia de datos** (LocalStorage).
+- **Consumo de APIs** (GitHub API en tiempo real).
+- **Lógica de estado compleja** (Temporizador Pomodoro, Sistema de Archivos y Calendario).
+
+---
 ## Tecnologías usadas
 - ⚡ Next.js (App Router)
 - 🎨 Tailwind CSS (Diseño Bento Grid & Glassmorphism)
 - ⚛️ React
 - 🚀 Vercel (Despliegue)
 
-## Instalación local
-
-1. Clonar el repositorio.
-2. Ejecutar `npm install`.
-3. Ejecutar `npm run dev`.
-
-Última actualización: 27 de Enero de 2026
+Última actualización: 28 de Enero de 2026
