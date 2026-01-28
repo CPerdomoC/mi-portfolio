@@ -9,16 +9,16 @@ import Link from "next/link";
 type Task = {
   id: string;
   title: string;
-  date: string; // Formato YYYY-MM-DD
+  date: string;
   type: "examen" | "viaje" | "entrega" | "otro";
 };
 
 type FileItem = {
   id: string;
-  parentId: string | null; // null = Raíz
+  parentId: string | null;
   name: string;
   type: "folder" | "file";
-  content: string; // Contenido del archivo de texto
+  content: string;
   createdAt: string;
 };
 
@@ -29,7 +29,7 @@ type FileItem = {
 export default function Dashboard() {
   
   // --- ESTADOS GLOBALES ---
-  const [time, setTime] = useState<Date | null>(null); // Null inicial para evitar error de hidratación
+  const [time, setTime] = useState<Date | null>(null);
   const [activeTab, setActiveTab] = useState("overview");
 
   // --- ESTADOS: RELOJ / POMODORO ---
@@ -38,7 +38,7 @@ export default function Dashboard() {
   const [customMinutes, setCustomMinutes] = useState(25);
 
   // --- ESTADOS: CALENDARIO ---
-  const [currentDate, setCurrentDate] = useState(new Date()); // Para saber qué mes estamos viendo
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   // --- ESTADOS: TAREAS (EVENTS) ---
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -55,7 +55,7 @@ export default function Dashboard() {
   // 3. EFECTOS (Persistencia y Tiempo)
   // ==========================================
 
-  // Reloj Cliente (Evitar error de hidratación)
+  // Reloj Cliente
   useEffect(() => {
     setTime(new Date());
     const interval = setInterval(() => setTime(new Date()), 1000);
@@ -134,7 +134,7 @@ export default function Dashboard() {
       createdAt: new Date().toISOString()
     };
     setFileSystem([...fileSystem, newItem]);
-    setNewFileName(""); // Limpiar input
+    setNewFileName("");
   };
 
   const getCurrentFolder = () => fileSystem.find(f => f.id === currentFolderId);
@@ -156,9 +156,8 @@ export default function Dashboard() {
   const getFirstDayOfMonth = (date: Date) => {
     const year = date.getFullYear();
     const month = date.getMonth();
-    // 0 = Domingo, 1 = Lunes... Queremos que Lunes sea el primer día visualmente
     let day = new Date(year, month, 1).getDay();
-    return day === 0 ? 6 : day - 1; // Ajuste para que semana empiece en Lunes
+    return day === 0 ? 6 : day - 1;
   };
 
   const changeMonth = (offset: number) => {

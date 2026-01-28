@@ -2,8 +2,19 @@ import Image from "next/image";
 import Link from "next/link";
 
 // ==========================================
-// 1. ZONA DE DATOS
+// 1. ZONA DE DATOS Y TIPOS
 // ==========================================
+
+// Definimos cómo es un proyecto que viene de GitHub
+interface GitHubRepo {
+  id: number;
+  name: string;
+  description: string | null;
+  html_url: string;
+  topics: string[];
+  language: string;
+  updated_at: string;
+}
 
 const personalInfo = {
   name: "Christhian Perdomo Casanova",
@@ -14,33 +25,12 @@ const personalInfo = {
   github: "https://github.com/CPerdomoC/"
 };
 
-const projects = [
-  {
-    title: "Mi Portfolio Web",
-    description: "Este mismo sitio web. Diseño moderno tipo Bento Grid con animaciones y estructura modular.",
-    tags: ["Next.js", "Tailwind CSS", "TypeScript"],
-    link: "https://github.com/CPerdomoC/mi-portfolio" // Enlace a tu repo
-  },
-  {
-    title: "Gestor de Inventario",
-    description: "Aplicación para controlar stock en tiempo real. Creada durante mis prácticas.",
-    tags: ["Java", "SQL", "Swing"],
-    link: "#"
-  },
-  {
-    title: "Script Automatización",
-    description: "Herramienta en Python para organizar archivos automáticamente por extensión.",
-    tags: ["Python", "Scripting"],
-    link: "#"
-  }
-];
-
 const techStack = [
-  { name: "HTML5", level: "Avanzado", percent: "85%", color: "bg-orange-500" },
-  { name: "CSS3", level: "Avanzado", percent: "80%", color: "bg-blue-500" },
+  { name: "HTML5", level: "Intermedio", percent: "54%", color: "bg-orange-500" },
+  { name: "CSS3", level: "Intermedio", percent: "51%", color: "bg-blue-500" },
   { name: "JavaScript", level: "Intermedio", percent: "60%", color: "bg-yellow-400" },
-  { name: "Next.js", level: "Principiante", percent: "30%", color: "bg-white" },
-  { name: "Python", level: "Principiante", percent: "30%", color: "bg-blue-400" },
+  { name: "Next.js", level: "Principiante", percent: "18%", color: "bg-white" },
+  { name: "Python", level: "Principiante", percent: "20%", color: "bg-blue-400" },
   { name: "Java", level: "Intermedio", percent: "50%", color: "bg-red-500" },
 ];
 
@@ -67,18 +57,39 @@ const education = [
 ];
 
 // ==========================================
-// 2. COMPONENTE VISUAL
+// 2. FUNCIÓN PARA PEDIR DATOS A GITHUB
 // ==========================================
 
-export default function Home() {
+async function getLatestRepos(): Promise<GitHubRepo[]> {
+  try {
+    const res = await fetch(
+      "https://api.github.com/users/CPerdomoC/repos?sort=updated&per_page=3",
+      { next: { revalidate: 3600 } } //3600/60= 60/60, el tiempo en el que se va actualizar es 1 hora 
+    );
+
+    if (!res.ok) throw new Error("Error al conectar con GitHub");
+
+    return res.json();
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+}
+
+// ==========================================
+// 3. COMPONENTE VISUAL (Async Server Component)
+// ==========================================
+
+export default async function Home() {
+  // Aquí ocurre la magia: Esperamos a que lleguen los datos REALES antes de pintar la web
+  const projects = await getLatestRepos();
+
   return (
     <main className="min-h-screen bg-neutral-950 text-gray-300 pb-20 overflow-x-hidden selection:bg-emerald-500/30">
       
-      {/* --- LUCES DE FONDO (LAS "LUCECITAS") --- */}
+      {/* --- BACKGROUND FX --- */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {/* Luz Verde Arriba Derecha */}
         <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-emerald-600/20 rounded-full blur-[120px] opacity-50 animate-pulse" />
-        {/* Luz Azul Abajo Izquierda */}
         <div className="absolute bottom-[-10%] left-[-10%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[120px] opacity-50" />
       </div>
 
@@ -88,19 +99,15 @@ export default function Home() {
           
           {/* =========================================
               COLUMNA IZQUIERDA (Info Personal + CV)
-              Ocupa 7 de 12 columnas
              ========================================= */}
           <div className="lg:col-span-7 space-y-12">
             
             {/* HERO / SOBRE MÍ */}
             <section className="flex flex-col sm:flex-row gap-8 items-center text-center sm:text-left">
               
-              {/* FOTO CON EFECTO NEÓN */}
               <div className="group relative shrink-0">
-                {/* El brillo que aparece al hacer hover */}
                 <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500 to-cyan-500 rounded-full blur opacity-20 group-hover:opacity-100 transition duration-500"></div>
                 
-                {/* Contenedor de la imagen */}
                 <div className="relative w-40 h-40 rounded-full bg-neutral-900 border-4 border-neutral-900 overflow-hidden flex items-center justify-center">
                   <Image 
                     src="/avatar.png" 
@@ -119,12 +126,12 @@ export default function Home() {
                 <p className="text-lg text-gray-400 leading-relaxed">
                   {personalInfo.bio}
                 </p>
-                <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
+                <div className="flex flex-wrap gap-3 justify-center sm:justify-start items-center">
                   <a href={personalInfo.linkedin} target="_blank" className="bg-[#0077b5] text-white px-5 py-2 rounded-full font-medium hover:scale-105 transition-transform text-sm">LinkedIn</a>
                   <a href={personalInfo.github} target="_blank" className="bg-neutral-800 text-white px-5 py-2 rounded-full border border-neutral-700 hover:border-emerald-500 transition-colors text-sm">GitHub</a>
-                <Link href="/dashboard" className="bg-neutral-800 text-emerald-400 px-6 py-2 rounded-full border border-neutral-700 hover:bg-neutral-700 hover:border-emerald-500 transition-all flex items-center gap-2">
-                  <span>⚡</span> Área de Trabajo
-                </Link>
+                  <Link href="/dashboard" className="bg-neutral-900 text-emerald-400 px-5 py-2 rounded-full border border-emerald-500/30 hover:bg-emerald-500/10 hover:border-emerald-500 transition-all flex items-center gap-2 text-sm">
+                    <span>⚡</span> Área de Trabajo
+                  </Link>
                 </div>
               </div>
             </section>
@@ -185,8 +192,7 @@ export default function Home() {
           </div>
 
           {/* =========================================
-              COLUMNA DERECHA (Proyectos / Cristal)
-              Ocupa 5 de 12 columnas (y se queda fija al bajar)
+              COLUMNA DERECHA (Proyectos REALES de GitHub)
              ========================================= */}
           <div className="lg:col-span-5">
             <div className="sticky top-10 space-y-6">
@@ -196,45 +202,60 @@ export default function Home() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                 </span>
-                <h2 className="text-2xl font-bold text-white">Proyectos Destacados</h2>
+                <h2 className="text-2xl font-bold text-white">Últimos Proyectos</h2>
               </div>
+              
+              <p className="text-xs text-gray-500 mb-4">
+                * Conectado en tiempo real a la API de GitHub
+              </p>
 
-              {/* TARJETAS CRISTAL (GLASSMORPHISM) */}
-              {projects.map((project, index) => (
-                <a 
-                  key={index}
-                  href={project.link}
-                  target="_blank"
-                  className="group block relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6 transition-all duration-300 hover:bg-white/10 hover:border-emerald-500/50 hover:-translate-y-1 shadow-lg hover:shadow-emerald-500/10"
-                >
-                  {/* Brillo interior al hacer hover */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-emerald-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
-                  
-                  <div className="relative z-10">
-                    <div className="flex justify-between items-start mb-3">
-                      <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors">
-                        {project.title}
-                      </h3>
-                      <span className="text-xs bg-black/50 px-2 py-1 rounded text-gray-400 border border-white/10">Code ↗</span>
-                    </div>
+              {projects.length > 0 ? (
+                projects.map((project) => (
+                  <a 
+                    key={project.id}
+                    href={project.html_url}
+                    target="_blank"
+                    className="group block relative overflow-hidden rounded-2xl bg-white/5 backdrop-blur-md border border-white/10 p-6 transition-all duration-300 hover:bg-white/10 hover:border-emerald-500/50 hover:-translate-y-1 shadow-lg hover:shadow-emerald-500/10"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/0 via-emerald-500/5 to-emerald-500/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out"></div>
                     
-                    <p className="text-gray-300 text-sm mb-5 leading-relaxed">
-                      {project.description}
-                    </p>
+                    <div className="relative z-10">
+                      <div className="flex justify-between items-start mb-3">
+                        <h3 className="text-xl font-bold text-white group-hover:text-emerald-300 transition-colors capitalize">
+                          {project.name.replace(/-/g, " ")}
+                        </h3>
+                        <span className="text-xs bg-black/50 px-2 py-1 rounded text-gray-400 border border-white/10">Code ↗</span>
+                      </div>
+                      
+                      <p className="text-gray-300 text-sm mb-5 leading-relaxed line-clamp-3">
+                        {project.description || "Este proyecto no tiene descripción en GitHub, pero puedes ver el código haciendo clic."}
+                      </p>
 
-                    {/* ETIQUETAS */}
-                    <div className="flex flex-wrap gap-2">
-                      {project.tags.map((tag, i) => (
-                        <span key={i} className="px-3 py-1 text-xs font-medium text-emerald-200 bg-emerald-500/20 rounded-full border border-emerald-500/20">
-                          {tag}
-                        </span>
-                      ))}
+                      <div className="flex flex-wrap gap-2">
+                        {/* Si tiene topics (etiquetas) úsalas, si no, usa el lenguaje principal */}
+                        {project.topics && project.topics.length > 0 ? (
+                          project.topics.slice(0, 3).map((topic) => (
+                            <span key={topic} className="px-3 py-1 text-xs font-medium text-emerald-200 bg-emerald-500/20 rounded-full border border-emerald-500/20">
+                              {topic}
+                            </span>
+                          ))
+                        ) : (
+                           project.language && (
+                             <span className="px-3 py-1 text-xs font-medium text-blue-200 bg-blue-500/20 rounded-full border border-blue-500/20">
+                               {project.language}
+                             </span>
+                           )
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </a>
-              ))}
+                  </a>
+                ))
+              ) : (
+                <div className="p-4 rounded-xl border border-red-500/20 bg-red-500/10 text-red-200 text-sm text-center">
+                  No se pudieron cargar los repositorios de GitHub. (Revisa que sean públicos).
+                </div>
+              )}
 
-              {/* Tarjeta Extra: GitHub */}
               <a 
                   href={personalInfo.github}
                   target="_blank"
