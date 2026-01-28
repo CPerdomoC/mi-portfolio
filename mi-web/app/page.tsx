@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 // ==========================================
 // 1. ZONA DE DATOS
@@ -121,6 +122,9 @@ export default function Home() {
                 <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
                   <a href={personalInfo.linkedin} target="_blank" className="bg-[#0077b5] text-white px-5 py-2 rounded-full font-medium hover:scale-105 transition-transform text-sm">LinkedIn</a>
                   <a href={personalInfo.github} target="_blank" className="bg-neutral-800 text-white px-5 py-2 rounded-full border border-neutral-700 hover:border-emerald-500 transition-colors text-sm">GitHub</a>
+                <Link href="/dashboard" className="bg-neutral-800 text-emerald-400 px-6 py-2 rounded-full border border-neutral-700 hover:bg-neutral-700 hover:border-emerald-500 transition-all flex items-center gap-2">
+                  <span>⚡</span> Área de Trabajo
+                </Link>
                 </div>
               </div>
             </section>

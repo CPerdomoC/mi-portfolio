@@ -1,7 +1,7 @@
 # Portfolio de Christhian Perdomo
 
 Portfolio web desarrollado con **Next.js 14**, **TypeScript** y **Tailwind CSS**.
-Creado como proyecto para demostrar capacidades de desarrollo Frontend y despliegue.
+Creado como proyecto para demostrar capacidades de desarrollo Frontend y despliegue con ayuda de la inteligencia artificial.
 
 ## Tecnologías usadas
 - ⚡ Next.js (App Router)
