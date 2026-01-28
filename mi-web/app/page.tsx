@@ -19,8 +19,8 @@ interface GitHubRepo {
 const personalInfo = {
   name: "Christhian Perdomo Casanova",
   role: "Desarrollador Multiplataforma (DAM)",
-  bio: "Estudiante de Desarrollo de Aplicaciones Multiplataforma con experiencia internacional y práctica en entornos reales. Me especializo en resolver problemas técnicos y desarrollar soluciones web eficientes.",
-  email: "tuemail@gmail.com",
+  bio: "Estudiante de Desarrollo de Aplicaciones Multiplataforma con experiencia internacional y práctica en entornos reales. Enfocado en el desarrollo web y con el firme objetivo de crecer profesionalmente dentro del sector informático.",
+  email: "christhianperdomocasanova@gmail.com",
   linkedin: "https://www.linkedin.com/in/christhian-perdomo-casanova-4b979420b/",
   github: "https://github.com/CPerdomoC/"
 };
@@ -81,7 +81,6 @@ async function getLatestRepos(): Promise<GitHubRepo[]> {
 // ==========================================
 
 export default async function Home() {
-  // Aquí ocurre la magia: Esperamos a que lleguen los datos REALES antes de pintar la web
   const projects = await getLatestRepos();
 
   return (
@@ -102,7 +101,7 @@ export default async function Home() {
              ========================================= */}
           <div className="lg:col-span-7 space-y-12">
             
-            {/* HERO / SOBRE MÍ */}
+            {/* SOBRE MÍ */}
             <section className="flex flex-col sm:flex-row gap-8 items-center text-center sm:text-left">
               
               <div className="group relative shrink-0">
@@ -270,7 +269,7 @@ export default async function Home() {
         </div>
         
         <footer className="mt-20 border-t border-white/5 pt-8 text-center text-sm text-gray-600">
-          <p>© 2026 {personalInfo.name}. Hecho con Next.js y Tailwind.</p>
+          <p>© 2026 {personalInfo.name}. Hecho con Next.js y Tailwind. "hola mudo"</p>
         </footer>
 
       </div>
